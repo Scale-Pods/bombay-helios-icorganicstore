@@ -1,0 +1,232 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { KeyRound, Lock, CheckCircle2, AlertTriangle } from 'lucide-react';
+
+// 'checking' = reading the reset link from the URL
+// 'link'     = valid token found -> set new password
+// 'invalid'  = opened without a valid reset link
+// 'done'     = success
+type Step = 'checking' | 'link' | 'invalid' | 'done';
+
+/** Pull the Supabase auth params out of the URL hash fragment. */
+function readAuthHash(): { accessToken: string | null; type: string | null; error: string | null } {
+  if (typeof window === 'undefined') return { accessToken: null, type: null, error: null };
+  const hash = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : window.location.hash;
+  const p = new URLSearchParams(hash);
+  return {
+    accessToken: p.get('access_token'),
+    type: p.get('type'),
+    error: p.get('error_description') || p.get('error'),
+  };
+}
+
+export default function ResetPasswordPage() {
+  const router = useRouter();
+  const [step, setStep] = useState<Step>('checking');
+  const [linkToken, setLinkToken] = useState<string | null>(null);
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // The reset email links here with #access_token=… in the URL fragment.
+  useEffect(() => {
+    const { accessToken, error: hashError } = readAuthHash();
+    // Strip the token from the address bar either way.
+    history.replaceState(null, '', window.location.pathname);
+    if (hashError || !accessToken) {
+      setStep('invalid');
+      return;
+    }
+    setLinkToken(accessToken);
+    setStep('link');
+  }, []);
+
+  const submitReset = async () => {
+    setError(null);
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.');
+      return;
+    }
+    if (password !== confirm) {
+      setError('Passwords do not match.');
+      return;
+    }
+    setBusy(true);
+    try {
+      const res = await fetch('/api/auth/reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ access_token: linkToken, password }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data?.error || 'Could not reset the password.');
+        return;
+      }
+      setStep('done');
+    } catch {
+      setError('Network error — please try again.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '12px 14px',
+    borderRadius: '12px',
+    border: '1px solid var(--separator)',
+    outline: 'none',
+    fontSize: '13.5px',
+    background: 'var(--bg-layer2)',
+    color: 'var(--label-primary)',
+  };
+  const labelStyle: React.CSSProperties = {
+    fontSize: '11px',
+    fontWeight: 600,
+    color: 'var(--label-secondary)',
+    display: 'block',
+    marginBottom: '6px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+  };
+
+  return (
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'var(--bg-app)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+      }}
+    >
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '420px',
+          background: 'var(--glass-fill)',
+          backdropFilter: 'blur(30px) saturate(180%)',
+          border: '1px solid var(--glass-border)',
+          borderRadius: '24px',
+          padding: '32px',
+          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.12)',
+        }}
+      >
+        <div style={{ textAlign: 'center', marginBottom: '22px' }}>
+          <div
+            style={{
+              width: '64px',
+              height: '64px',
+              borderRadius: '18px',
+              background: 'rgba(0,122,255,0.12)',
+              border: '1px solid rgba(0,122,255,0.25)',
+              margin: '0 auto 14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#4aa3ff',
+            }}
+          >
+            {step === 'done' ? <CheckCircle2 size={26} /> : <KeyRound size={24} />}
+          </div>
+          <h1 style={{ fontSize: '19px', fontWeight: 800, color: 'var(--label-primary)', margin: 0 }}>
+            {step === 'done' ? 'Password updated' : step === 'invalid' ? 'Link not valid' : 'Set a new password'}
+          </h1>
+          <p style={{ fontSize: '12.5px', color: 'var(--label-secondary)', marginTop: '6px', lineHeight: 1.4 }}>
+            {step === 'checking' && 'Verifying your reset link…'}
+            {step === 'link' && 'Choose a new password for your account.'}
+            {step === 'invalid' && 'This page opens from the link in your password reset email. Request a new one from the sign-in page.'}
+            {step === 'done' && 'You can now sign in with your new password.'}
+          </p>
+        </div>
+
+        {error && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(255, 59, 48, 0.1)',
+              border: '1px solid rgba(255, 59, 48, 0.25)',
+              padding: '10px 12px',
+              borderRadius: '10px',
+              marginBottom: '16px',
+            }}
+          >
+            <AlertTriangle size={14} style={{ color: '#ff453a', flexShrink: 0 }} />
+            <span style={{ fontSize: '11.5px', color: '#ff453a', lineHeight: 1.3 }}>{error}</span>
+          </div>
+        )}
+
+        {step === 'link' && (
+          <form onSubmit={(e) => { e.preventDefault(); if (!busy) submitReset(); }} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div>
+              <label style={labelStyle}>New password</label>
+              <div style={{ position: 'relative' }}>
+                <Lock size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--label-tertiary)' }} />
+                <input
+                  type="password"
+                  autoComplete="new-password"
+                  placeholder="At least 8 characters"
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); setError(null); }}
+                  style={{ ...inputStyle, paddingLeft: '34px' }}
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label style={labelStyle}>Confirm new password</label>
+              <div style={{ position: 'relative' }}>
+                <Lock size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--label-tertiary)' }} />
+                <input
+                  type="password"
+                  autoComplete="new-password"
+                  placeholder="Re-enter password"
+                  value={confirm}
+                  onChange={(e) => { setConfirm(e.target.value); setError(null); }}
+                  style={{ ...inputStyle, paddingLeft: '34px' }}
+                  required
+                />
+              </div>
+            </div>
+            <button type="submit" disabled={busy} style={submitBtn(busy)}>
+              {busy ? 'Updating…' : 'Update password'}
+            </button>
+          </form>
+        )}
+
+        {(step === 'invalid' || step === 'done') && (
+          <button onClick={() => router.push('/')} style={submitBtn(false)}>
+            Go to sign in
+          </button>
+        )}
+
+        <div style={{ textAlign: 'center', fontSize: '10.5px', color: 'var(--label-tertiary)', marginTop: '18px' }}>
+          Secured Gateway • Powered by <span style={{ color: '#4aa3ff', fontWeight: 600 }}>ScalePods</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function submitBtn(busy: boolean): React.CSSProperties {
+  return {
+    padding: '13px',
+    borderRadius: '12px',
+    border: 'none',
+    background: 'linear-gradient(135deg, #007aff, #af52de)',
+    color: 'white',
+    fontWeight: 700,
+    cursor: busy ? 'wait' : 'pointer',
+    fontSize: '14px',
+    marginTop: '4px',
+    opacity: busy ? 0.7 : 1,
+  };
+}
