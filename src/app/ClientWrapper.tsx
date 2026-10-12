@@ -837,7 +837,7 @@ export function ClientWrapper({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark');
   const [business, setBusiness] = useState<BusinessId>('helios');
 
   // Restore the last-selected business on mount, and persist future switches.
