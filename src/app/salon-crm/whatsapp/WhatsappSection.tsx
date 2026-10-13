@@ -63,7 +63,7 @@ export default function WhatsappSection({ salons, view }: { salons: Salon[]; vie
             {view === 'analytics' && 'WhatsApp — Analytics'}
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--label-secondary)', marginTop: '4px', marginBottom: 0 }}>
-            Salon CRM WhatsApp threads from <code>salons.conversation_transcript</code>
+            B2B Leads CRM WhatsApp threads from <code>leads.conversation_transcript</code>
             {dateLabel ? ` · ${dateLabel}` : ''}.
           </p>
         </div>
@@ -92,8 +92,8 @@ function WaDashboard({ threads }: { threads: WaThread[] }) {
   return (
     <>
       <div className="metrics-grid mb-24">
-        <Tile accent="var(--green)" label="Active Chats" value={threads.length} icon={<MessageSquare size={12} />} sub="Salons with a thread" />
-        <Tile accent="var(--blue)" label="Inbound Messages" value={inbound} icon={<ArrowDownLeft size={12} />} sub="From salons" />
+        <Tile accent="var(--green)" label="Active Chats" value={threads.length} icon={<MessageSquare size={12} />} sub="Leads with a thread" />
+        <Tile accent="var(--blue)" label="Inbound Messages" value={inbound} icon={<ArrowDownLeft size={12} />} sub="From leads" />
         <Tile accent="var(--purple)" label="Outbound Messages" value={outbound} icon={<ArrowUpRight size={12} />} sub="From Growth OS" />
         <Tile accent="var(--orange)" label="Reply Rate" value={`${replyRate}%`} icon={<Reply size={12} />} sub={`${awaiting} awaiting`} />
       </div>
@@ -121,7 +121,7 @@ function WaDashboard({ threads }: { threads: WaThread[] }) {
           <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
               <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--separator)' }}>
-                <th style={{ padding: '12px 8px' }}>Salon</th>
+                <th style={{ padding: '12px 8px' }}>Lead</th>
                 <th style={{ padding: '12px 8px' }}>Number</th>
                 <th style={{ padding: '12px 8px' }}>Messages</th>
                 <th style={{ padding: '12px 8px' }}>Status</th>
@@ -186,7 +186,7 @@ function WaChats({ threads }: { threads: WaThread[] }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '24px', alignItems: 'start' }}>
       <div className="liquid-card" style={{ padding: '16px' }}>
-        <SearchBox value={search} onChange={setSearch} placeholder="Search salon or number..." />
+        <SearchBox value={search} onChange={setSearch} placeholder="Search lead or number..." />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '620px', overflowY: 'auto' }}>
           {filtered.length === 0 ? (
             <Empty text="No chats." />
@@ -310,7 +310,7 @@ function WaLeads({ threads }: { threads: WaThread[] }) {
               <Search size={13} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--label-tertiary)' }} />
               <input
                 type="text"
-                placeholder="Search salon, number, city..."
+                placeholder="Search lead, number, city..."
                 className="input"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -330,7 +330,7 @@ function WaLeads({ threads }: { threads: WaThread[] }) {
           <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
               <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--separator)' }}>
-                <th style={{ padding: '12px 8px' }}>Salon</th>
+                <th style={{ padding: '12px 8px' }}>Lead</th>
                 <th style={{ padding: '12px 8px' }}>Contact</th>
                 <th style={{ padding: '12px 8px' }}>Region / City</th>
                 <th style={{ padding: '12px 8px' }}>Stage</th>
@@ -417,7 +417,7 @@ function WaAnalytics({ threads }: { threads: WaThread[] }) {
       <div className="metrics-grid mb-24">
         <Tile accent="var(--green)" label="Messages Exchanged" value={allEntries.length} icon={<MessageSquare size={12} />} sub={`${outbound} out / ${inbound} in`} />
         <Tile accent="var(--blue)" label="Reply Rate" value={`${replyRate}%`} icon={<Reply size={12} />} sub={`${repliedThreads.length}/${threads.length} chats`} />
-        <Tile accent="var(--purple)" label="Avg. Response Time" value={avgResponse != null ? `${avgResponse.toFixed(1)}h` : '—'} icon={<Clock size={12} />} sub="First salon reply" />
+        <Tile accent="var(--purple)" label="Avg. Response Time" value={avgResponse != null ? `${avgResponse.toFixed(1)}h` : '—'} icon={<Clock size={12} />} sub="First lead reply" />
         <Tile accent="var(--orange)" label="Won from WhatsApp" value={wonCount} icon={<CheckCheck size={12} />} sub={`${lostCount} lost`} />
       </div>
 
@@ -470,7 +470,7 @@ function WaAnalytics({ threads }: { threads: WaThread[] }) {
           <h3 style={{ fontSize: '15px', fontWeight: '700', marginBottom: '16px' }}>Engagement Funnel</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <FunnelRow label="Chats started" value={threads.length} max={Math.max(threads.length, 1)} color="var(--blue)" />
-            <FunnelRow label="Salon replied" value={repliedThreads.length} max={Math.max(threads.length, 1)} color="var(--purple)" />
+            <FunnelRow label="Lead replied" value={repliedThreads.length} max={Math.max(threads.length, 1)} color="var(--purple)" />
             <FunnelRow label="Positive sentiment" value={threads.filter((t) => parseSentiment(t.salon.whatsapp_sentiment).interest === 'positive').length} max={Math.max(threads.length, 1)} color="var(--orange)" />
             <FunnelRow label="Won" value={wonCount} max={Math.max(threads.length, 1)} color="var(--green)" />
           </div>

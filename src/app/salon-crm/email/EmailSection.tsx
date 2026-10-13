@@ -59,7 +59,7 @@ export default function EmailSection({ salons, view }: { salons: Salon[]; view: 
             {view === 'analytics' && 'Email — Analytics'}
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--label-secondary)', marginTop: '4px', marginBottom: 0 }}>
-            Salon CRM email outreach from <code>salons.conversation_transcript_email</code>
+            B2B Leads CRM email outreach from <code>leads.conversation_transcript_email</code>
             {dateLabel ? ` · ${dateLabel}` : ''}.
           </p>
         </div>
@@ -104,7 +104,7 @@ function EmailDashboard({
         <Tile accent="var(--blue)" label="Emails Sent" value={sent.length} icon={<Send size={12} />} sub="Outbound, in range" />
         <Tile accent="var(--green)" label="Threads Replied" value={repliedThreads.length} icon={<Reply size={12} />} sub={`${replyRate}% reply rate`} />
         <Tile accent="var(--orange)" label="Awaiting Reply" value={awaiting} icon={<Clock size={12} />} sub="No inbound yet" />
-        <Tile accent="var(--purple)" label="Inbound Emails" value={received.length} icon={<Inbox size={12} />} sub="From salons" />
+        <Tile accent="var(--purple)" label="Inbound Emails" value={received.length} icon={<Inbox size={12} />} sub="From leads" />
       </div>
 
       <div className="liquid-card mb-24" style={{ padding: '24px' }}>
@@ -135,7 +135,7 @@ function EmailDashboard({
           <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
               <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--separator)' }}>
-                <th style={{ padding: '12px 8px' }}>Salon</th>
+                <th style={{ padding: '12px 8px' }}>Lead</th>
                 <th style={{ padding: '12px 8px' }}>Region / City</th>
                 <th style={{ padding: '12px 8px' }}>Stage</th>
                 <th style={{ padding: '12px 8px' }}>Sent At</th>
@@ -181,7 +181,7 @@ function EmailInbox({ threads }: { threads: EmailThread[] }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: '24px', alignItems: 'start' }}>
       <div className="liquid-card" style={{ padding: '16px' }}>
-        <SearchBox value={search} onChange={setSearch} placeholder="Search salon..." />
+        <SearchBox value={search} onChange={setSearch} placeholder="Search lead..." />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '620px', overflowY: 'auto' }}>
           {filtered.length === 0 ? (
             <Empty text="No conversations." />
@@ -228,7 +228,7 @@ function EmailInbox({ threads }: { threads: EmailThread[] }) {
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                      <span style={{ fontSize: '10.5px', color: 'var(--label-tertiary)', fontWeight: 600 }}>{inbound ? 'Salon' : 'Growth OS'}</span>
+                      <span style={{ fontSize: '10.5px', color: 'var(--label-tertiary)', fontWeight: 600 }}>{inbound ? 'Lead' : 'Growth OS'}</span>
                       <span style={{ fontSize: '10.5px', color: 'var(--label-tertiary)' }}>{new Date(entry.at).toLocaleString()}</span>
                     </div>
                     <MessageBody text={entry.message} compact />
@@ -286,7 +286,7 @@ function EmailAnalytics({
       <div className="metrics-grid mb-24">
         <Tile accent="var(--blue)" label="Total Emails Sent" value={sent.length} icon={<Send size={12} />} sub={`${received.length} inbound`} />
         <Tile accent="var(--green)" label="Reply Rate" value={`${replyRate}%`} icon={<Reply size={12} />} sub={`${repliedThreads.length}/${threads.length} threads`} />
-        <Tile accent="var(--purple)" label="Avg. Response Time" value={avgResponse != null ? `${avgResponse.toFixed(1)}h` : '—'} icon={<Clock size={12} />} sub="First salon reply" />
+        <Tile accent="var(--purple)" label="Avg. Response Time" value={avgResponse != null ? `${avgResponse.toFixed(1)}h` : '—'} icon={<Clock size={12} />} sub="First lead reply" />
         <Tile accent="var(--orange)" label="Avg. Msgs / Thread" value={avgMessages.toFixed(1)} icon={<MessageSquareText size={12} />} sub={`${threads.length} threads`} />
       </div>
 
@@ -318,7 +318,7 @@ function EmailAnalytics({
         <div className="liquid-card" style={{ padding: '24px' }}>
           <h3 style={{ fontSize: '15px', fontWeight: '700', marginBottom: '16px' }}>Email Funnel</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <FunnelRow label="Salons emailed" value={new Set(sent.map((m) => m.salon.id)).size} max={Math.max(threads.length, 1)} color="var(--blue)" />
+            <FunnelRow label="Leads emailed" value={new Set(sent.map((m) => m.salon.id)).size} max={Math.max(threads.length, 1)} color="var(--blue)" />
             <FunnelRow label="Threads with a reply" value={repliedThreads.length} max={Math.max(threads.length, 1)} color="var(--purple)" />
             <FunnelRow label="Won" value={wonCount} max={Math.max(threads.length, 1)} color="var(--green)" />
             <FunnelRow label="Lost" value={lostCount} max={Math.max(threads.length, 1)} color="var(--red)" />

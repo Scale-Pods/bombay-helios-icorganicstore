@@ -94,7 +94,7 @@ export default function LeadsTable({ initialSalons }: { initialSalons?: Salon[] 
     <div style={{ animation: 'fadeIn 300ms ease' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h2 style={{ fontSize: '22px', fontWeight: '700', color: 'var(--label-primary)', margin: 0 }}>Salon Leads</h2>
+          <h2 style={{ fontSize: '22px', fontWeight: '700', color: 'var(--label-primary)', margin: 0 }}>B2B Leads</h2>
           <p style={{ fontSize: '13px', color: 'var(--label-secondary)', marginTop: '4px', marginBottom: 0 }}>
             All leads generated across regions for the active business.
           </p>
@@ -130,7 +130,7 @@ export default function LeadsTable({ initialSalons }: { initialSalons?: Salon[] 
         <div className="metric-tile liquid-card" style={{ '--tile-accent-color': 'var(--green)' } as React.CSSProperties}>
           <span className="label">Won Deals</span>
           <span className="value">{wonCount}</span>
-          <span className="trend up" style={{ color: 'var(--green)' }}><DollarSign size={12} /> Converted salons</span>
+          <span className="trend up" style={{ color: 'var(--green)' }}><DollarSign size={12} /> Converted leads</span>
         </div>
       </div>
 
@@ -168,7 +168,7 @@ export default function LeadsTable({ initialSalons }: { initialSalons?: Salon[] 
           <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
               <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--separator)' }}>
-                <th style={{ padding: '12px 8px' }}>Salon</th>
+                <th style={{ padding: '12px 8px' }}>Lead</th>
                 <th style={{ padding: '12px 8px' }}>Region / City</th>
                 <th style={{ padding: '12px 8px' }}>Contact</th>
                 <th style={{ padding: '12px 8px' }}>Source</th>

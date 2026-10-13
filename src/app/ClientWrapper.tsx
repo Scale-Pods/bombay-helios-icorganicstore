@@ -1741,7 +1741,7 @@ export function ClientWrapper({ children }: { children: React.ReactNode }) {
                   className="spotlight-input"
                   value={spotlightInput}
                   onChange={(e) => setSpotlightInput(e.target.value)}
-                  placeholder="Type navigations (e.g. inventory, care, salon)..."
+                  placeholder="Type navigations (e.g. inventory, care, leads)..."
                   autoFocus
                 />
               </div>

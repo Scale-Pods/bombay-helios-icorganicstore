@@ -215,7 +215,7 @@ function VoiceDashboard({ calls }: { calls: VoiceCall[] }) {
           <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
               <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--separator)' }}>
-                <th style={{ padding: '12px 8px' }}>Salon</th>
+                <th style={{ padding: '12px 8px' }}>Lead</th>
                 <th style={{ padding: '12px 8px' }}>Number</th>
                 <th style={{ padding: '12px 8px' }}>Outcome</th>
                 <th style={{ padding: '12px 8px' }}>Duration</th>
@@ -320,7 +320,7 @@ function VoiceLogs({ calls }: { calls: VoiceCall[] }) {
           <div>
             <h3 style={{ fontSize: '16px', fontWeight: '700', margin: 0 }}>Call Logs</h3>
             <p style={{ fontSize: '12px', color: 'var(--label-tertiary)', margin: '4px 0 0' }}>
-              {filtered.length} call{filtered.length === 1 ? '' : 's'} · {matchedCount} of {calls.length} linked to a salon
+              {filtered.length} call{filtered.length === 1 ? '' : 's'} · {matchedCount} of {calls.length} linked to a lead
               {dateLabel ? ` · ${dateLabel}` : ''}
             </p>
           </div>
@@ -329,7 +329,7 @@ function VoiceLogs({ calls }: { calls: VoiceCall[] }) {
               <Search size={13} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--label-tertiary)' }} />
               <input
                 type="text"
-                placeholder="Search salon, customer, phone, status..."
+                placeholder="Search lead, customer, phone, status..."
                 className="input"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -355,7 +355,7 @@ function VoiceLogs({ calls }: { calls: VoiceCall[] }) {
               style={{ padding: '8px', fontSize: '13px' }}
             >
               <option value="all">All calls</option>
-              <option value="matched">Linked to salon</option>
+              <option value="matched">Linked to lead</option>
               <option value="unmatched">Not linked</option>
             </select>
           </div>
@@ -366,14 +366,14 @@ function VoiceLogs({ calls }: { calls: VoiceCall[] }) {
             <thead>
               <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--separator)' }}>
                 <th style={{ padding: '12px 8px' }}>Outcome</th>
-                <th style={{ padding: '12px 8px' }}>Salon</th>
+                <th style={{ padding: '12px 8px' }}>Lead</th>
                 <th style={{ padding: '12px 8px' }}>Link</th>
                 <th style={{ padding: '12px 8px' }}>Phone</th>
                 <th style={{ padding: '12px 8px' }}>Started</th>
                 <th style={{ padding: '12px 8px' }}>Duration</th>
                 <th style={{ padding: '12px 8px' }}>Cost</th>
                 <th style={{ padding: '12px 8px' }}>VAPI Status</th>
-                <th style={{ padding: '12px 8px' }}>Salon Voice Status</th>
+                <th style={{ padding: '12px 8px' }}>Lead Voice Status</th>
                 <th style={{ padding: '12px 8px' }}>Sentiment</th>
                 <th style={{ padding: '12px 8px' }}>Stage</th>
                 <th style={{ padding: '12px 8px' }}>Rec.</th>
@@ -513,8 +513,8 @@ function CallDetailModal({ call, onClose }: { call: VoiceCall; onClose: () => vo
             <DetailField label="Created" value={log.created_at ? new Date(log.created_at).toLocaleString() : null} />
           </div>
 
-          {/* salon link */}
-          <SectionLabel>salon link</SectionLabel>
+          {/* lead link */}
+          <SectionLabel>lead link</SectionLabel>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', fontSize: '13px', marginBottom: '20px' }}>
             <DetailField
               label="Match"
@@ -525,14 +525,14 @@ function CallDetailModal({ call, onClose }: { call: VoiceCall; onClose: () => vo
                   ? 'customer_phone = salons.phone'
                   : match === 'name'
                   ? 'customer_name = salons.salon_name'
-                  : 'not linked to any salon'
+                  : 'not linked to any lead'
               }
             />
             <DetailField label="master_leads_id" value={log.master_leads_id ? `${log.master_leads_id}${log.lead_id_found ? ' (found)' : ''}` : null} />
             {salon && <DetailField label="salons.id" value={salon.id} />}
             {salon && (
               <DetailField
-                label="Salon Stage"
+                label="Lead Stage"
                 value={<span className="badge badge-blue" style={{ textTransform: 'capitalize' }}>{salon.current_stage.replace(/_/g, ' ')}</span>}
               />
             )}
@@ -544,7 +544,7 @@ function CallDetailModal({ call, onClose }: { call: VoiceCall; onClose: () => vo
           {/* salons voice_* columns */}
           {salon && (
             <>
-              <SectionLabel>salons · voice fields</SectionLabel>
+              <SectionLabel>leads · voice fields</SectionLabel>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', fontSize: '13px', marginBottom: '20px' }}>
                 <DetailField label="voice_call_status" value={salon.voice_call_status} />
                 <DetailField label="voice_call_at" value={salon.voice_call_at ? new Date(salon.voice_call_at).toLocaleString() : null} />
@@ -608,7 +608,7 @@ function CallDetailModal({ call, onClose }: { call: VoiceCall; onClose: () => vo
                       }}
                     >
                       <span style={{ fontSize: '10px', color: 'var(--label-tertiary)', fontWeight: 600, display: 'block', marginBottom: '3px' }}>
-                        {turn.role === 'customer' ? 'Salon' : turn.role === 'system' ? 'System' : 'Alka'}
+                        {turn.role === 'customer' ? 'Lead' : turn.role === 'system' ? 'System' : 'Alka'}
                       </span>
                       <p style={{ fontSize: '13px', margin: 0, whiteSpace: 'pre-wrap', color: 'var(--label-primary)' }}>{turn.text}</p>
                     </div>
@@ -621,7 +621,7 @@ function CallDetailModal({ call, onClose }: { call: VoiceCall; onClose: () => vo
 
         <div style={{ padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '11px', color: 'var(--label-tertiary)' }}>
-            {salon ? `/share/voice/${salon.id}` : 'Link this call to a salon to enable sharing.'}
+            {salon ? `/share/voice/${salon.id}` : 'Link this call to a lead to enable sharing.'}
           </span>
           <div style={{ display: 'flex', gap: '10px' }}>
             <button
@@ -711,7 +711,7 @@ function VoiceAnalytics({ calls }: { calls: VoiceCall[] }) {
   return (
     <>
       <div className="metrics-grid mb-24">
-        <Tile accent="var(--purple)" label="Calls Placed" value={calls.length} icon={<PhoneCall size={12} />} sub={`${withSalon.length} matched to a salon`} />
+        <Tile accent="var(--purple)" label="Calls Placed" value={calls.length} icon={<PhoneCall size={12} />} sub={`${withSalon.length} matched to a lead`} />
         <Tile accent="var(--green)" label="Connect Rate" value={`${connectRate}%`} icon={<CheckCheck size={12} />} sub={`${connected.length}/${calls.length} connected`} />
         <Tile accent="var(--blue)" label="Avg. Talk Time" value={formatDuration(avgTalkSec)} icon={<Clock size={12} />} sub={`${formatDuration(totalTalkSec)} total`} />
         <Tile accent="var(--orange)" label="Total Spend" value={formatUsd(totalCost)} icon={<DollarSign size={12} />} sub={`${formatUsd(avgCost)} / call`} />

@@ -178,7 +178,7 @@ export default function SalonCrmDashboard({
             labels: STAGES.map(stageLabel),
             datasets: [
               {
-                label: 'Salons',
+                label: 'Leads',
                 data: STAGES.map((s) => stageCounts[s] ?? 0),
                 backgroundColor: STAGES.map((s) =>
                   s === 'won' ? '#34C759' : s === 'lost' ? '#FF3B30' : '#007AFF'
@@ -233,7 +233,7 @@ export default function SalonCrmDashboard({
     <div style={{ animation: 'fadeIn 300ms ease' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h2 style={{ fontSize: '22px', fontWeight: '700', color: 'var(--label-primary)', margin: 0 }}>Salon CRM Dashboard</h2>
+          <h2 style={{ fontSize: '22px', fontWeight: '700', color: 'var(--label-primary)', margin: 0 }}>B2B Leads CRM Dashboard</h2>
           <p style={{ fontSize: '13px', color: 'var(--label-secondary)', marginTop: '4px', marginBottom: 0 }}>
             Live metrics across lead generation, outreach cadence, inbound replies, and AI voice calls.
           </p>
@@ -253,7 +253,7 @@ export default function SalonCrmDashboard({
           <span className="trend up" style={{ color: 'var(--green)' }}><TrendingUp size={12} /> {wonCount} won / {lostCount} lost</span>
         </div>
         <div className="metric-tile liquid-card" style={{ '--tile-accent-color': 'var(--purple)' } as React.CSSProperties}>
-          <span className="label">Salons Engaged</span>
+          <span className="label">Leads Engaged</span>
           <span className="value">{engagedSalons}</span>
           <span className="trend up" style={{ color: 'var(--purple)' }}><Calendar size={12} /> Replied on WhatsApp or Email</span>
         </div>
@@ -344,12 +344,12 @@ export default function SalonCrmDashboard({
           <div style={{ background: 'var(--fill-quaternary)', padding: '14px', borderRadius: '12px' }}>
             <span style={{ fontSize: '11px', color: 'var(--label-secondary)', textTransform: 'uppercase', fontWeight: '600' }}>WhatsApp Cadence Sends</span>
             <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--green)', marginTop: '4px' }}>{whatsappSent.length}</div>
-            <div style={{ fontSize: '11px', color: 'var(--label-tertiary)', marginTop: '2px' }}>{whatsappReplies.length} salons replied</div>
+            <div style={{ fontSize: '11px', color: 'var(--label-tertiary)', marginTop: '2px' }}>{whatsappReplies.length} leads replied</div>
           </div>
           <div style={{ background: 'var(--fill-quaternary)', padding: '14px', borderRadius: '12px' }}>
             <span style={{ fontSize: '11px', color: 'var(--label-secondary)', textTransform: 'uppercase', fontWeight: '600' }}>Email Cadence Sends</span>
             <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--blue)', marginTop: '4px' }}>{emailsSent.length}</div>
-            <div style={{ fontSize: '11px', color: 'var(--label-tertiary)', marginTop: '2px' }}>{emailReplies.length} salons replied</div>
+            <div style={{ fontSize: '11px', color: 'var(--label-tertiary)', marginTop: '2px' }}>{emailReplies.length} leads replied</div>
           </div>
           <div style={{ background: 'var(--fill-quaternary)', padding: '14px', borderRadius: '12px' }}>
             <span style={{ fontSize: '11px', color: 'var(--label-secondary)', textTransform: 'uppercase', fontWeight: '600' }}>Voice Calls (Day 10)</span>
